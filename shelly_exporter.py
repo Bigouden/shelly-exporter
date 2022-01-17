@@ -47,18 +47,18 @@ except ValueError:
     sys.exit(1)
 
 METRICS = [
-        {'name': 'bluetooth_state', 'description': 'Bluetooth State (1: ON, 0: OFF', 'type': 'gauge'},
-        {'name': 'cloud_state', 'description': 'Cloud State (1: ON, 0: OFF', 'type': 'gauge'},
-        {'name': 'mqtt_state', 'description': 'MQTT State (1: ON, 0: OFF', 'type': 'gauge'},
-        {'name': 'apower', 'description': 'Power (Watt)', 'type': 'gauge'},
-        {'name': 'voltage', 'description': 'Voltage (Volt)', 'type': 'gauge'},
-        {'name': 'current', 'description': 'Current (Amperer)', 'type': 'gauge'},
-        {'name': 'output_state', 'description': 'Output State (1: ON, 0: OFF)', 'type': 'gauge'},
-        {'name': 'temperature', 'description': 'Temperature (°C)', 'type': 'gauge'},
-        {'name': 'wifi_rssi', 'description': 'Wifi Signal Strentgh', 'type': 'gauge'},
-        {'name': 'fs_free', 'description': 'Available amount of FS in bytes', 'type': 'gauge'},
-        {'name': 'ram_free', 'description': 'Available amount of RAM in bytes', 'type': 'gauge'},
-        {'name': 'uptime', 'description': 'Seconds elapsed since boot', 'type': 'gauge'}
+    {'name': 'bluetooth_state', 'description': 'Bluetooth State (1: ON, 0: OFF', 'type': 'gauge'},
+    {'name': 'cloud_state', 'description': 'Cloud State (1: ON, 0: OFF', 'type': 'gauge'},
+    {'name': 'mqtt_state', 'description': 'MQTT State (1: ON, 0: OFF', 'type': 'gauge'},
+    {'name': 'apower', 'description': 'Power (Watt)', 'type': 'gauge'},
+    {'name': 'voltage', 'description': 'Voltage (Volt)', 'type': 'gauge'},
+    {'name': 'current', 'description': 'Current (Amperer)', 'type': 'gauge'},
+    {'name': 'output_state', 'description': 'Output State (1: ON, 0: OFF)', 'type': 'gauge'},
+    {'name': 'temperature', 'description': 'Temperature (°C)', 'type': 'gauge'},
+    {'name': 'wifi_rssi', 'description': 'Wifi Signal Strentgh', 'type': 'gauge'},
+    {'name': 'fs_free', 'description': 'Available amount of FS in bytes', 'type': 'gauge'},
+    {'name': 'ram_free', 'description': 'Available amount of RAM in bytes', 'type': 'gauge'},
+    {'name': 'uptime', 'description': 'Seconds elapsed since boot', 'type': 'gauge'}
 ]
 
 # REGISTRY Configuration
@@ -70,7 +70,7 @@ class ShellyCollector():
     '''Shelly Collector Class'''
     def __init__(self):
         self.session = requests.session()
-        self.api_endpoint = "http://%s/rpc" % SHELLY_HOST
+        self.api_endpoint = f"http://{SHELLY_HOST}/rpc"
 
     def get_data(self):
         '''Get Shelly Data'''
@@ -81,10 +81,10 @@ class ShellyCollector():
         labels['job'] = SHELLY_EXPORTER_NAME
         # Collect Shelly Data
         try:
-            shelly_info = self.session.get("%s/Shelly.GetDeviceInfo" % self.api_endpoint).json()
-            shelly_config = self.session.get("%s/Shelly.GetConfig" % self.api_endpoint).json()
-            shelly_status = self.session.get("%s/Shelly.GetStatus" % self.api_endpoint).json()
-        except json.decoder.JSONDecodeError as exception:
+            shelly_info = self.session.get(f"{self.api_endpoint}/Shelly.GetDeviceInfo").json()
+            shelly_config = self.session.get(f"{self.api_endpoint}/Shelly.GetConfig").json()
+            shelly_status = self.session.get(f"{self.api_endpoint}/Shelly.GetStatus").json()
+        except json.decoder.JSONDecodeError:
             logging.error("Invalid JSON Response")
             sys.exit(1)
         except requests.exceptions.ConnectionError as exception:
