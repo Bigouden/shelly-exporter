@@ -56,7 +56,9 @@ METRICS = [
     {'name': 'output_state', 'description': 'Output State (1: ON, 0: OFF)', 'type': 'gauge'},
     {'name': 'temperature', 'description': 'Temperature (°C)', 'type': 'gauge'},
     {'name': 'wifi_rssi', 'description': 'Wifi Signal Strentgh', 'type': 'gauge'},
+    {'name': 'fs_size', 'description': 'Total amount of FS in bytes', 'type': 'gauge'},
     {'name': 'fs_free', 'description': 'Available amount of FS in bytes', 'type': 'gauge'},
+    {'name': 'ram_size', 'description': 'Total amount of RAM in bytes', 'type': 'gauge'},
     {'name': 'ram_free', 'description': 'Available amount of RAM in bytes', 'type': 'gauge'},
     {'name': 'uptime', 'description': 'Seconds elapsed since boot', 'type': 'counter'}
 ]
@@ -126,11 +128,11 @@ class ShellyCollector():
         # Uptime
         data['uptime'] = shelly_status['sys']['uptime']
         # RAM Size
-        labels['ram_size'] = str(shelly_status['sys']['ram_size'])
+        data['ram_size'] = shelly_status['sys']['ram_size']
         # RAM Free
         data['ram_free'] = shelly_status['sys']['ram_free']
         # FS Size
-        labels['fs_size'] = str(shelly_status['sys']['fs_size'])
+        data['fs_size'] = shelly_status['sys']['fs_size']
         # RAM Free
         data['fs_free'] = shelly_status['sys']['fs_free']
         # Wifi IP
