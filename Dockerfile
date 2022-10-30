@@ -25,5 +25,6 @@ COPY --chown=${USERNAME}:${USERNAME} --chmod=500 ${SCRIPT} ${VIRTUAL_ENV}
 COPY --chown=${USERNAME}:${USERNAME} --chmod=500 entrypoint.sh /
 USER ${USERNAME}
 WORKDIR ${VIRTUAL_ENV}
+EXPOSE ${SHELLY_EXPORTER_PORT}
 HEALTHCHECK CMD nc -vz localhost ${SHELLY_EXPORTER_PORT} || exit 1
 ENTRYPOINT ["/entrypoint.sh"]
