@@ -14,7 +14,7 @@ ENV VIRTUAL_ENV="/shelly-exporter"
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 RUN xargs -a /apk_packages apk add --no-cache --update \
     && python3 -m venv ${VIRTUAL_ENV} \
-    && pip install --no-cache-dir --no-dependencies --no-binary :all: -r requirements.txt \
+    && pip install --no-cache-dir --no-dependencies --no-binary :all: -r pip_packages \
     && pip uninstall -y setuptools pip \
     && useradd -l -u "${UID}" -U -s /bin/sh -m "${USERNAME}" \
     && rm -rf \
