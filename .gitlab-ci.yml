@@ -5,7 +5,7 @@ include:
     file: '.gitlab-ci-prometheus.yml'
 
 variables:
-  SHELLY_HOST: $SHELLY_HOST
+  SHELLY_HOST: 192.168.10.250
 
 stages:
   - Quality
