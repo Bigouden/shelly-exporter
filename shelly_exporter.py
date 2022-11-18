@@ -9,6 +9,8 @@ import json
 import sys
 import time
 from collections import defaultdict
+from datetime import datetime
+import pytz
 import requests
 from prometheus_client.core import REGISTRY, Metric
 from prometheus_client import start_http_server, PROCESS_COLLECTOR, PLATFORM_COLLECTOR
@@ -17,34 +19,47 @@ SHELLY_EXPORTER_NAME = os.environ.get('SHELLY_EXPORTER_NAME',
                                       'shelly-exporter')
 SHELLY_EXPORTER_LOGLEVEL = os.environ.get('SHELLY_EXPORTER_LOGLEVEL',
                                           'INFO').upper()
+SHELLY_EXPORTER_TZ = os.environ.get('TZ', 'Europe/Paris')
 
 # Logging Configuration
 try:
+    pytz.timezone(SHELLY_EXPORTER_TZ)
+    logging.Formatter.converter = lambda *args: \
+                                  datetime.now(tz=pytz.timezone(SHELLY_EXPORTER_TZ)).timetuple()
     logging.basicConfig(stream=sys.stdout,
                         format='%(asctime)s - %(levelname)s - %(message)s',
                         datefmt='%d/%m/%Y %H:%M:%S',
                         level=SHELLY_EXPORTER_LOGLEVEL)
+except pytz.exceptions.UnknownTimeZoneError:
+    logging.Formatter.converter = lambda *args: \
+                                  datetime.now(tz=pytz.timezone('Europe/Paris')).timetuple()
+    logging.basicConfig(stream=sys.stdout,
+                        format='%(asctime)s - %(levelname)s - %(message)s',
+                        datefmt='%d/%m/%Y %H:%M:%S',
+                        level='INFO')
+    logging.error("TZ invalid : %s !", SHELLY_EXPORTER_TZ)
+    os._exit(1)
 except ValueError:
     logging.basicConfig(stream=sys.stdout,
                         format='%(asctime)s - %(levelname)s - %(message)s',
                         datefmt='%d/%m/%Y %H:%M:%S',
                         level='INFO')
     logging.error("SHELLY_EXPORTER_LOGLEVEL invalid !")
-    sys.exit(1)
+    os._exit(1)
 
 # Check for SHELLY_HOST
 if os.environ.get('SHELLY_HOST') is not None and os.environ.get('SHELLY_HOST') != '':
     SHELLY_HOST = os.environ.get('SHELLY_HOST')
 else:
     logging.error("SHELLY_HOST must be set and not empty !")
-    sys.exit(1)
+    os._exit(1)
 
 # Check for SHELLY_EXPORTER_PORT
 try:
     SHELLY_EXPORTER_PORT = int(os.environ.get('SHELLY_EXPORTER_PORT', '8123'))
 except ValueError:
     logging.error("SHELLY_EXPORTER_PORT must be int !")
-    sys.exit(1)
+    os._exit(1)
 
 METRICS = [
     {'name': 'bluetooth_state', 'description': 'Bluetooth State (1: ON, 0: OFF', 'type': 'gauge'},
@@ -88,10 +103,10 @@ class ShellyCollector():
             shelly_status = self.session.get(f"{self.api_endpoint}/Shelly.GetStatus").json()
         except json.decoder.JSONDecodeError:
             logging.error("Invalid JSON Response")
-            sys.exit(1)
+            os._exit(1)
         except requests.exceptions.ConnectionError as exception:
             logging.error(exception)
-            sys.exit(1)
+            os._exit(1)
 
         # Shelly Model
         labels['model'] = shelly_info['app']
@@ -174,7 +189,7 @@ def main():
     start_http_server(SHELLY_EXPORTER_PORT)
     # Init HueMotionSensorCollector
     REGISTRY.register(ShellyCollector())
-    # Loop Infinity
+    # Infite Loop
     while True:
         time.sleep(1)
 
