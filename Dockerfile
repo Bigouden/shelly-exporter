@@ -1,4 +1,4 @@
-FROM alpine:3.16
+FROM alpine:3.17
 LABEL maintainer="Thomas GUIRRIEC <thomas@guirriec.fr>"
 ENV SHELLY_HOST=""
 ENV SHELLY_EXPORTER_PORT=8123
