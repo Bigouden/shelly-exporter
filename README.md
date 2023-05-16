@@ -28,7 +28,7 @@ shelly_apower{firmware="0.11.3",job="shelly-exporter",model="Plus1PM",wifi_ip="1
 # HELP shelly_voltage Voltage (Volt)
 # TYPE shelly_voltage gauge
 shelly_voltage{firmware="0.11.3",job="shelly-exporter",model="Plus1PM",wifi_ip="192.168.10.250"} 257.0
-# HELP shelly_current Current (Amperer)
+# HELP shelly_current Current (Ampere)
 # TYPE shelly_current gauge
 shelly_current{firmware="0.11.3",job="shelly-exporter",model="Plus1PM",wifi_ip="192.168.10.250"} 0.0
 # HELP shelly_temperature Temperature (°C)
@@ -49,7 +49,7 @@ shelly_fs_size{firmware="0.11.3",job="shelly-exporter",model="Plus1PM",wifi_ip="
 # HELP shelly_fs_free Available amount of FS in bytes
 # TYPE shelly_fs_free gauge
 shelly_fs_free{firmware="0.11.3",job="shelly-exporter",model="Plus1PM",wifi_ip="192.168.10.250"} 163840.0
-# HELP shelly_wifi_rssi Wifi Signal Strentgh
+# HELP shelly_wifi_rssi Wifi Signal Strength
 # TYPE shelly_wifi_rssi gauge
 shelly_wifi_rssi{firmware="0.11.3",job="shelly-exporter",model="Plus1PM",wifi_ip="192.168.10.250"} -70.0
 ```
