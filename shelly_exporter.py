@@ -118,6 +118,7 @@ except ValueError:
     os._exit(1)
 
 # Check for SHELLY_HOST
+SHELLY_HOST = None
 if os.environ.get("SHELLY_HOST") is not None and os.environ.get("SHELLY_HOST") != "":
     SHELLY_HOST = os.environ.get("SHELLY_HOST")
 else:
