@@ -121,10 +121,8 @@ except ValueError:
     os._exit(1)
 
 # Check for SHELLY_HOST
-SHELLY_HOST = None
-if os.environ.get("SHELLY_HOST") is not None and os.environ.get("SHELLY_HOST") != "":
-    SHELLY_HOST = os.environ.get("SHELLY_HOST")
-else:
+SHELLY_HOST = os.environ.get("SHELLY_HOST")
+if SHELLY_HOST is None:
     logging.error("SHELLY_HOST must be set and not empty !")
     os._exit(1)
 
